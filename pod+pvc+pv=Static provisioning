@@ -1,0 +1,65 @@
+############# Pod.yml ########
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app
+spec:
+  containers:
+  - name: app
+    image: centos
+    volumeMounts:
+    - name: persistent-storage
+      mountPath: /data
+  volumes:
+  - name: persistent-storage
+    persistentVolumeClaim:
+      claimName: ebs-claim
+
+---
+
+########## PVC (Persistent volume claim) ####################
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi   <--------------------------------- It recognize it by this
+
+########## PV (Persistent volume) ####################
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistanceVolumeReclaimPolity: Retain
+  nfs:
+    server: nfs.example.com
+    path: /path/to/storage
+
+########## PV #####################
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: ebs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistanceVolumeReclaimPolity: Retain
+  awsElasticBlockStore:
+    VolumeID:<EBS VolumeID>
+    fsType:ext4
