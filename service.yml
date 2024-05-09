@@ -1,0 +1,62 @@
+We have 4 Types in it:
+
+1) Cluster IP: This type exposes the service on a cluster-internal IP. It makes the service accessible only from within the cluster. This is the default service type if none is specified.
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ask360-ns
+  name: web-svc
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: ClusterIP
+
+
+2)NodePort: This type exposes the service on each node's IP at a static port. It allows the service to be accessible from outside the cluster, typically using <NodeIP>:<NodePort>.
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ask360-ns
+  name: web-svc
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: NodePort
+
+3)LoadBalancer: This type exposes the service externally using a cloud provider's load balancer. It assigns a public IP address to the service, allowing external access.
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ask360-ns
+  name: web-svc
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: LoadBalancer
+
+4)Headless: A headless service in Kubernetes is a service with the clusterIP: None setting, which does not allocate an IP address and does not load balance traffic it is use for STS(Stateful sets).
+
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: ask360-ns
+  name: web-svc
+spec:
+  selector:
+    app: web
+  ports:
+    - protocol: TCP
+      port: 3000
+  type: None
