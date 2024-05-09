@@ -1,0 +1,58 @@
+
+########################### Statefulsets ##################################
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: pgvector-db
+spec:
+  serviceAccountName: ebs-csi-controller-sa
+  replicas: 2
+  selector:
+    matchLabels:
+      app: db
+  template:
+    metadata:
+      labels:
+        app: db
+    spec:
+      containers:
+      - name: db
+        image: postgres
+        ports:
+        - containerPort: 5432
+        env:
+          - name: POSTGRES_USER
+            value: your_username  # Replace with your desired username
+          - name: POSTGRES_PASSWORD
+            value: your_password  # Replace with a strong password
+          - name: POSTGRES_DB
+            value: your_database_name        
+        volumeMounts:
+        - name: vectordb-pvc
+          mountPath: /var/lib/postgresql/data
+
+######################## PVC ############################################# 
+
+  volumeClaimTemplates:
+  - metadata:
+      name: vectordb-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: ebs-sc
+
+############### Storage class ##############################
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs-sc
+provisioner: ebs.csi.aws.com
+parameters:
+  type: gp2
+volumeBindingMode: WaitForFirstConsumer
+
+
