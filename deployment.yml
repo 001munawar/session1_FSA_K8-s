@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  namespace: riyan-ns
+  labels:
+    app: web
+spec: 
+  replicas: 2
+  selector:
+    matchLabels: 
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec: 
+      containers:
+      - name: web
+        image: manu-process-web:latest
+        volumeMounts:          <--------------------------------------  Mounting inside the container
+        - name: nginx-config
+          mountPath: /etc/nginx/nginx.conf
+        - name: nginx-logs
+          mountPath: /var/log/nginx
+
+        env:                  <---------------------------------------- Pass environment variables to the container
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: superset-geniq-sec
+                key: POSTGRES_PASSWORD        
+          - name: BASE_URL
+            value: "http://app.thinkdigits.com"
+          - name: UI_URL
+            value: "http://app.thinkdigits.com"
+          - name: AUTH_BASE_URL
+            value: "http://app.thinkdigits.com/auth-ms"
+          - name: SERVICE_BASE_URL
+            value: "http://app.thinkdigits.com/edge-api" 
+
+
+        ports:
+        - containerPort: 3000
+        
