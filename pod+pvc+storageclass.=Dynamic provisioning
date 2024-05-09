@@ -32,12 +32,30 @@ spec:
       storage: 1Gi
 
 ############### Storage class  #####################
+##### Using EBS Volume ########
 
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: ebs-sc
 provisioner: ebs.csi.aws.com
+volumeBindingMode: WaitForFirstConsumer
 parameters:
   type: gp2
+
+
+                  (  or  )
+
+
+###### Using EFS Volume ###########
+
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs-sc
+provisioner: efs.csi.aws.com
 volumeBindingMode: WaitForFirstConsumer
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-03c05758cd4a1b386
+  directoryPerms: "775"
