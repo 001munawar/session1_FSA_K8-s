@@ -1,0 +1,21 @@
+apiVersion: autoscaling.k8s.io/v1
+kind: VerticalPodAutoscaler
+metadata:
+  name: my-app-vpa
+  namespace: default
+spec:
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: my-app-deployment
+  updatePolicy:
+    updateMode: "Auto" # VPA will automatically update resource requests and limits
+  resourcePolicy:
+    containers:
+    - containerName: my-app-container
+      minAllowed:
+        memory: "512Mi"  # Minimum memory allowed for this container
+        cpu: "500m"      # Minimum CPU allowed for this container
+      maxAllowed:
+        memory: "4Gi"    # Maximum memory allowed for this container
+        cpu: "2"         # Maximum CPU allowed for this container
