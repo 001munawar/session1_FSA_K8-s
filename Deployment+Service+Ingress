@@ -47,6 +47,8 @@ hostname => Load balancer Endpoint URL
 
 ######################## Ingress.yml ##############################
 
+##  Explain Ingress with https://spacelift.io/blog/kubernetes-ingress ## 
+
 kind: Ingress
 metadata:
   name: vpro-ingress
