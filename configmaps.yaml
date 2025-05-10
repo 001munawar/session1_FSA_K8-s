@@ -1,0 +1,25 @@
+####### pod.yml #########
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-app
+spec:
+  containers:
+    - name: my-container
+      image: my-app-image
+      envFrom:
+        - configMapRef:
+            name: my-literal-config
+
+
+
+###### Configmap #########
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-literal-config
+data:
+  DATABASE_URL: "mysql://user:password@localhost/mydatabase"
+  API_KEY: "abc123"
