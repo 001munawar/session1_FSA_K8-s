@@ -21,5 +21,8 @@ kind: ConfigMap
 metadata:
   name: my-literal-config
 data:
-  DATABASE_URL: "mysql://user:password@localhost/mydatabase"
-  API_KEY: "abc123"
+  BASE_URL: "http://app.thinkdigits.com"
+  UI_URL: "http://app.thinkdigits.com"
+  AUTH_BASE_URL: "http://app.thinkdigits.com/auth-ms"
+  SERVICE_BASE_URL: "http://app.thinkdigits.com/edge-api"
+
